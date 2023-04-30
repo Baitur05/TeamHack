@@ -2,6 +2,8 @@ import { createContext, useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 
 import { Header } from './components/header/header'
+import LoginPage from './pages/Login/LoginPage'
+import Register from './pages/Register/Register'
 import { Home } from './pages/home'
 import { NotFound } from './pages/not-found'
 import { Products } from './pages/products'
@@ -20,6 +22,8 @@ export const App = () => {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/products" element={<Products />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/login" element={<LoginPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>

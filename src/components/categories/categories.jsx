@@ -1,7 +1,7 @@
 import { setCategoryId } from '../../redux/slices/filterSlice'
 
 export const Categories = ({ onChangeCategory, value }) => {
-  const category = ['All', 'Men"s', 'Female', 'Childish']
+  const category = ['All', 'Bishkek', 'Osh', 'Issyk kul', 'Talas']
 
   return (
     <div className="categories">
