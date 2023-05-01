@@ -1,88 +1,102 @@
-import React, { useState } from 'react'
+import "./Register.scss";
+import React, { useState } from "react";
 
-import './Register.scss'
+const Register = () => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState(false);
 
-function Register() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
+  const handleFirstNameChange = (event) => {
+    setFirstName(event.target.value);
+  };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault()
+  const handleLastNameChange = (event) => {
+    setLastName(event.target.value);
+  };
 
-    if (password !== confirmPassword) {
-      setError('Passwords do not match')
-      return
-    }
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
 
-    try {
-      setLoading(true)
-      const response = await fetch('http://your-api-endpoint.com/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  };
+
+  const handlePasswordConfirmChange = (event) => {
+    setPasswordConfirm(event.target.value);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = {
+      first_name: firstName,
+      last_name: lastName,
+      email,
+      password,
+      password_confirm: passwordConfirm,
+    };
+    fetch("http://35.203.36.97/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Ошибка при регистрации");
+        }
+        return response.json();
       })
-
-      if (!response.ok) {
-        const data = await response.json()
-        setError(data.error)
-        setLoading(false)
-        return
-      }
-
-      // если регистрация прошла успешно, можно перенаправить пользователя на страницу входа
-      window.location.href = '/login'
-    } catch (error) {
-      console.error(error)
-      setError('An error occurred. Please try again later.')
-      setLoading(false)
-    }
-  }
+      .then((data) => {
+        console.log("Успешно зарегистрирован:", data);
+        setSuccessMessage(true);
+      })
+      .catch((error) => {
+        console.error("Ошибка регистрации:", error);
+        setErrorMessage(error.message);
+      });
+  };
 
   return (
-    <div className="register-page">
-      <form onSubmit={handleSubmit} className="register-form">
-        <label className="register-label">
-          Email:
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="register-input"
-          />
-        </label>
-        <br />
-        <label className="register-label">
-          Password:
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="register-input"
-          />
-        </label>
-        <br />
-        <label className="register-label">
-          Confirm Password:
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            className="register-input"
-          />
-        </label>
-        <br />
-        {error && <div className="register-error">{error}</div>}
-        <button type="submit" className="register-button" disabled={loading}>
-          {loading ? 'Loading...' : 'Register'}
-        </button>
-      </form>
-    </div>
-  )
-}
+    <form onSubmit={handleSubmit}>
+      <label>
+        Имя:
+        <input type="text" value={firstName} onChange={handleFirstNameChange} />
+      </label>
+      <label>
+        Фамилия:
+        <input type="text" value={lastName} onChange={handleLastNameChange} />
+      </label>
+      <label>
+        Email:
+        <input type="email" value={email} onChange={handleEmailChange} />
+      </label>
+      <label>
+        Пароль:
+        <input
+          type="password"
+          value={password}
+          onChange={handlePasswordChange}
+        />
+      </label>
+      <label>
+        Подтверждение пароля:
+        <input
+          type="password"
+          value={passwordConfirm}
+          onChange={handlePasswordConfirmChange}
+        />
+      </label>
+      {errorMessage && <p className="error">{errorMessage}</p>}
+      {successMessage && <p className="success">Регистрация прошла успешно!</p>}
+      <button type="submit">Зарегистрироваться</button>
+    </form>
+  );
+};
 
-export default Register
+export default Register;

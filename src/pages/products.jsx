@@ -3,7 +3,6 @@ import qs from 'qs'
 import { useContext, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-
 import { SearchContext } from '../App'
 import { Categories } from '../components/categories/categories'
 import { Pagination } from '../components/pagination/pagination'
